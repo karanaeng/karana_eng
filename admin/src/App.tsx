@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   ShoppingBag, 
-  Sparkles, 
   Layers, 
   FileText, 
   Plus, 
@@ -20,7 +19,6 @@ import {
   Settings,
   Printer,
   RefreshCw,
-  CheckCircle,
   Clock,
   Mail,
   Phone,
