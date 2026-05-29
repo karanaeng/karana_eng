@@ -8,7 +8,7 @@ import { ThreeDPrintingForm } from '../components/services/ThreeDPrintingForm';
 import { ProjectCard } from '../components/works/ProjectCard';
 import { ChevronRight, Printer, CheckCircle2 } from 'lucide-react';
 
-const BASE_URL = 'https://karanaagency.com';
+const BASE_URL = 'https://karanaagency.vercel.app';
 
 export default function ServicePage() {
   const { slug } = useParams();
@@ -75,13 +75,13 @@ export default function ServicePage() {
         property="og:description"
         content={service.description ?? `${service.name} services by Karana Agency.`}
       />
-      {service.image && <meta property="og:image" content={service.image} />}
+      <meta property="og:image" content="/og-image.jpg" />
 
       {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={`${service.name} | Karana Agency`} />
       {service.description && <meta name="twitter:description" content={service.description} />}
-      {service.image && <meta name="twitter:image" content={service.image} />}
+      <meta name="twitter:image" content="/og-image.jpg" />
 
       {/* JSON-LD */}
       <script type="application/ld+json">

@@ -8,8 +8,8 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "Karana Agency",
-  "url": "https://karanaagency.com",
-  "logo": "https://karanaagency.com/logo.png", // update path
+  "url": "https://karanaagency.vercel.app",
+  "logo": "https://karanaagency.vercel.app/logo.png", // update path
   "description": "Engineering services, 3D printing, and custom tech solutions based in Amaravati, India.",
   "address": {
     "@type": "PostalAddress",
@@ -40,20 +40,20 @@ export default function Home() {
           content="Karana Agency delivers precision engineering, 3D printing, and custom technology solutions from Amaravati, India. Get a response within 24 hours."
         />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://karanaagency.com" />
+        <link rel="canonical" href="https://karanaagency.vercel.app" />
 
         {/* Open Graph */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://karanaagency.com" />
+        <meta property="og:url" content="https://karanaagency.vercel.app" />
         <meta property="og:title" content="Karana Agency — Engineering & 3D Printing, Amaravati" />
         <meta property="og:description" content="Precision engineering, 3D printing, and custom tech solutions. Based in Amaravati, India." />
-        <meta property="og:image" content="https://karanaagency.com/og-image.jpg" /> {/* 1200×630px */}
+        <meta property="og:image" content="https://karanaagency.vercel.app/og-image.jpg" /> {/* 1200×630px */}
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Karana Agency — Engineering & 3D Printing" />
         <meta name="twitter:description" content="Precision engineering and custom tech solutions from Amaravati, India." />
-        <meta name="twitter:image" content="https://karanaagency.com/og-image.jpg" />
+        <meta name="twitter:image" content="https://karanaagency.vercel.app/og-image.jpg" />
 
         {/* JSON-LD */}
         <script type="application/ld+json">

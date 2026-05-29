@@ -25,24 +25,26 @@ export default function ProjectPage() {
   const nextProject = projects[currentIndex + 1] || projects[0];
 
   // Build canonical URL — update base domain
-  const BASE_URL = 'https://karanaagency.com';
+  const BASE_URL = 'https://karanaagency.vercel.app';
   const canonicalUrl = `${BASE_URL}/works/${project.slug}`;
+
+  // Use heroImage for OG/Twitter; fall back to first image in array if needed
+  const ogImage = project.heroImage ?? project.images?.[0]?.url;
 
   // JSON-LD: CreativeWork schema per project
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     "name": project.title,
-    "description": project.description,   // add `description` to your project data if missing
+    "description": project.description,
     "url": canonicalUrl,
-    "image": project.image,               // add `image` to your project data if missing
+    ...(ogImage && { "image": ogImage }),
     "creator": {
       "@type": "Organization",
       "name": "Karana Agency",
       "url": BASE_URL,
     },
-    ...(project.category && { "genre": project.category }),
-    ...(project.year && { "dateCreated": String(project.year) }),
+    ...(project.date && { "dateCreated": project.date }),
   };
 
   return (
@@ -69,13 +71,13 @@ export default function ProjectPage() {
           property="og:description"
           content={project.description ?? `A project by Karana Agency.`}
         />
-        {project.image && <meta property="og:image" content={project.image} />}
+        {ogImage && <meta property="og:image" content={ogImage} />}
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${project.title} | Karana Agency`} />
         {project.description && <meta name="twitter:description" content={project.description} />}
-        {project.image && <meta name="twitter:image" content={project.image} />}
+        {ogImage && <meta name="twitter:image" content={ogImage} />}
 
         {/* JSON-LD */}
         <script type="application/ld+json">

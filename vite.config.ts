@@ -1,10 +1,31 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import viteCompression from 'vite-plugin-compression'
+import sitemap from 'vite-plugin-sitemap'
+import { projects } from './src/data/projects'
+import { services } from './src/data/services'
 
-// https://vite.dev/config/
+const projectRoutes = projects?.map(p => `/project/${p.slug}`) ?? [];
+const serviceRoutes = services?.map(s => `/service/${s.slug}`) ?? [];
+
 export default defineConfig({
-  plugins: [react(), viteCompression()],
+  plugins: [
+    react(),
+    viteCompression(),
+    sitemap({
+      hostname: 'https://karanaagency.vercel.app',
+      dynamicRoutes: [
+        '/',
+        '/about',
+        '/services',
+        '/works',
+        '/contact',
+        '/buy-products',
+        ...projectRoutes,
+        ...serviceRoutes,
+      ],
+    }),
+  ],
   build: {
     rollupOptions: {
       output: {
@@ -19,12 +40,11 @@ export default defineConfig({
             if (id.includes('lucide-react')) {
               return 'vendor-icons';
             }
-            return 'vendor'; // all other third-party dependencies
+            return 'vendor';
           }
         }
       }
     },
-    chunkSizeWarningLimit: 800, // raise threshold slightly since three.js is naturally large
+    chunkSizeWarningLimit: 800,
   }
 })
-
