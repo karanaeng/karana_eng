@@ -37,7 +37,7 @@ const structuredData = {
     "addressLocality": "Amaravati",
     "addressCountry": "IN"
   },
-  "url": "https://karanaagency.com/contact", // update to your domain
+  "url": "https://karanaagency.vercel.app/contact", // update to your domain
   "contactPoint": {
     "@type": "ContactPoint",
     "telephone": "+91-75692-74373",
@@ -112,13 +112,13 @@ export default function Contact() {
           content="Get in touch with Karana Agency for engineering services, 3D printing, and custom tech solutions in Amaravati, India. We respond within 24 hours."
         />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://karanaagency.com/contact" /> {/* update domain */}
+        <link rel="canonical" href="https://karanaagency.vercel.app/contact" /> {/* update domain */}
 
         {/* Open Graph */}
         <meta property="og:title" content="Contact Karana Agency" />
         <meta property="og:description" content="Reach out for engineering, 3D printing, and custom tech services. Based in Amaravati, India." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://karanaagency.com/contact" />
+        <meta property="og:url" content="https://karanaagency.vercel.app/contact" />
 
         {/* JSON-LD */}
         <script type="application/ld+json">

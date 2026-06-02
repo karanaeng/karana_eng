@@ -134,8 +134,8 @@ export default function Checkout() {
     ? `Order Confirmed — ${product.title} | Karana`
     : `Checkout — ${product.title} | Karana`;
 
-  const stepNumber = (n: number) =>
-    option === 'customise' ? `0${n}/` : `0${n - 1}/`;
+  //const _stepNumber = (n: number) =>
+    //option === 'customise' ? `0${n}/` : `0${n - 1}/`;
 
   return (
     <>
