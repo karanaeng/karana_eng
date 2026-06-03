@@ -5,8 +5,8 @@ import sitemap from 'vite-plugin-sitemap'
 import { projects } from './src/data/projects'
 import { services } from './src/data/services'
 
-const projectRoutes = projects?.map(p => `/project/${p.slug}`) ?? [];
-const serviceRoutes = services?.map(s => `/service/${s.slug}`) ?? [];
+const projectRoutes = projects?.map(p => `/works/${p.slug}`) ?? [];
+const serviceRoutes = services?.map(s => `/services/${s.slug}`) ?? [];
 
 export default defineConfig({
   plugins: [
@@ -20,7 +20,7 @@ export default defineConfig({
         '/services',
         '/works',
         '/contact',
-        '/buy-products',
+        '/buy',
         ...projectRoutes,
         ...serviceRoutes,
       ],

@@ -348,7 +348,7 @@ export default function Contact() {
                               type="submit"
                               disabled={status === 'sending'}
                               aria-disabled={status === 'sending'}
-                              className="w-full py-5 bg-cosmic-gold text-cosmic-black font-black uppercase tracking-widest rounded-xl hover:bg-yellow-300 transition-all duration-300 flex items-center justify-center gap-3 group shadow-gold-glow disabled:opacity-60"
+                              className="w-full py-5 bg-cosmic-gold text-cosmic-black font-black uppercase tracking-widest rounded-xl hover:bg-cosmic-gold-light transition-all duration-300 flex items-center justify-center gap-3 group shadow-gold-glow disabled:opacity-60"
                             >
                               {status === 'sending' ? (
                                 <>

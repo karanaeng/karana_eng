@@ -21,11 +21,11 @@ export const CosmicImage: React.FC<CosmicImageProps> = ({
     if (fallbackGradient) return fallbackGradient;
     
     const colors = [
-      'from-purple-900 via-indigo-950 to-black',
-      'from-blue-950 via-slate-900 to-black',
-      'from-violet-950 via-purple-900 to-black',
-      'from-fuchsia-950 via-indigo-950 to-black',
-      'from-amber-950 via-stone-900 to-black',
+      'from-cosmic-surface via-cosmic-black to-black',
+      'from-slate-900 via-cosmic-surface to-black',
+      'from-cyan-950 via-cosmic-surface to-black',
+      'from-zinc-900 via-cosmic-black to-black',
+      'from-neutral-800 via-cosmic-surface to-black',
     ];
     
     let hash = 0;

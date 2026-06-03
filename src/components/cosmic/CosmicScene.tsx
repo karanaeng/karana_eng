@@ -16,7 +16,7 @@ export const CosmicScene = ({ children }: { children?: React.ReactNode }) => {
         }}
         dpr={[1, 1.5]}
       >
-        <color attach="background" args={['#000000']} />
+        <color attach="background" args={['#070B12']} />
 
         <Suspense fallback={null}>
           <Starfield />

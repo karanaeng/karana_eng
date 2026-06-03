@@ -10,7 +10,7 @@ export const ContactCTA = () => {
         initial={{ opacity: 0, scale: 0.9 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
-        className="relative p-12 md:p-20 rounded-3xl overflow-hidden bg-gradient-to-br from-cosmic-gold via-cosmic-gold-light to-cosmic-gold"
+        className="relative p-12 md:p-20 rounded-3xl overflow-hidden bg-cosmic-card border border-cosmic-border shadow-cosmic"
       >
         {/* Animated Background Elements */}
         <div className="absolute inset-0 opacity-30 pointer-events-none">
@@ -18,16 +18,16 @@ export const ContactCTA = () => {
         </div>
 
         <div className="relative z-10">
-          <h2 className="text-4xl md:text-6xl font-black font-montserrat text-cosmic-black mb-8 tracking-tight">
+          <h2 className="text-4xl md:text-6xl font-black font-montserrat text-cosmic-white mb-8 tracking-tight">
             READY TO TRANSFORM <br />
             YOUR VISION?
           </h2>
-          <p className="text-cosmic-black/80 text-lg max-w-2xl mx-auto mb-12 font-montserrat leading-relaxed">
+          <p className="text-cosmic-muted text-lg max-w-2xl mx-auto mb-12 font-montserrat leading-relaxed">
             Join the ranks of elite companies partnering with Karana to build the next generation of engineering marvels.
           </p>
           <Link
             to="/contact"
-            className="group px-10 py-5 bg-cosmic-black text-white font-bold rounded-full inline-flex items-center gap-3 hover:scale-105 transition-all duration-300 shadow-2xl"
+            className="group px-10 py-5 bg-cosmic-gold text-cosmic-black font-bold rounded-full inline-flex items-center gap-3 hover:bg-cosmic-gold-light hover:scale-105 transition-all duration-300 shadow-2xl"
           >
             Let's Talk Strategy
             <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />

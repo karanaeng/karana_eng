@@ -28,13 +28,12 @@ export const Navbar = () => {
       scrolled ? "bg-cosmic-black/80 backdrop-blur-md py-3 border-b border-cosmic-gold/20" : "bg-transparent"
     )}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 bg-cosmic-gold rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
-            <span className="text-cosmic-black font-black text-xl">K</span>
-          </div>
-          <span className="text-white font-montserrat font-black text-2xl tracking-tighter">
-            KARANA
-          </span>
+        <Link to="/" className="flex items-center group" aria-label="Karana Engineering home">
+          <img
+            src="/karana-logo.png"
+            alt="Karana Engineering"
+            className="h-12 w-auto max-w-[190px] object-contain transition-opacity duration-300 group-hover:opacity-90 md:h-14 md:max-w-[230px]"
+          />
         </Link>
 
         <div className="hidden md:flex items-center gap-8">

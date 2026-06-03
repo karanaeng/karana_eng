@@ -1,18 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Inter:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap');
 
 :root {
-  --bg-primary: #050508;
-  --bg-secondary: #0b0b0f;
+  --bg-primary: #070B12;
+  --bg-secondary: #121823;
+  --bg-card: #1C2431;
   --bg-glass: rgba(255, 255, 255, 0.02);
   --border-glass: rgba(255, 255, 255, 0.06);
-  --accent-gold: #c5a880;
-  --accent-gold-glow: rgba(197, 168, 128, 0.15);
-  --accent-gold-light: #dfc8a5;
-  --text-primary: #ffffff;
-  --text-secondary: #8e8d99;
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-heading: 'Montserrat', system-ui, sans-serif;
-  --shadow-glow: 0 0 20px rgba(197, 168, 128, 0.2);
+  --accent-gold: #9CA6B7;
+  --accent-gold-glow: rgba(156, 166, 183, 0.16);
+  --accent-gold-light: #F5F7FA;
+  --text-primary: #F5F7FA;
+  --text-secondary: #9CA6B7;
+  --border-strong: #313B4A;
+  --font-sans: 'Space Grotesk', system-ui, sans-serif;
+  --font-heading: 'Space Grotesk', system-ui, sans-serif;
+  --shadow-glow: 0 0 20px rgba(156, 166, 183, 0.18);
   --shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
@@ -70,7 +72,7 @@ body {
 }
 
 .glass-card:hover {
-  border-color: rgba(197, 168, 128, 0.2);
+  border-color: rgba(156, 166, 183, 0.2);
 }
 
 /* App Container Layout */
@@ -361,7 +363,7 @@ textarea.cosmic-input {
 }
 
 .badge-gold {
-  background-color: rgba(197, 168, 128, 0.1);
+  background-color: rgba(156, 166, 183, 0.12);
   color: var(--accent-gold);
 }
 

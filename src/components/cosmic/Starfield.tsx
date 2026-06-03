@@ -27,7 +27,7 @@ export const Starfield = () => {
     <Points ref={ref} positions={particles} stride={3}>
       <PointMaterial
         transparent
-        color="#FFFFFF"
+        color="#F5F7FA"
         size={0.08}
         sizeAttenuation={true}
         depthWrite={false}

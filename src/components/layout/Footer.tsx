@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Share2, Music, Mail, Eye, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin } from 'lucide-react';
 
 export const Footer = () => {
   return (
@@ -7,24 +7,16 @@ export const Footer = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 md:col-span-1">
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 bg-cosmic-gold rounded-full flex items-center justify-center">
-                <span className="text-cosmic-black font-black text-sm">K</span>
-              </div>
-              <span className="text-white font-montserrat font-black text-xl tracking-tighter">
-                KARANA
-              </span>
+            <div className="mb-6">
+              <img
+                src="/karana-logo.png"
+                alt="Karana Engineering"
+                className="h-14 w-auto max-w-[220px] object-contain"
+              />
             </div>
             <p className="text-white/50 font-montserrat text-sm leading-relaxed mb-8">
               An elite multidisciplinary engineering and technology agency pushing the boundaries of what's possible.
             </p>
-            <div className="flex gap-4">
-              {[Share2, Music, Mail, Eye].map((Icon, i) => (
-                <a key={i} href="#" className="p-2 rounded-full bg-white/5 text-white/70 hover:text-cosmic-gold hover:bg-cosmic-gold/10 transition-all duration-300">
-                  <Icon size={18} />
-                </a>
-              ))}
-            </div>
           </div>
 
           <div>

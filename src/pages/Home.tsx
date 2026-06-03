@@ -1,7 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { Hero } from '../components/home/Hero';
 import { ServicesGrid } from '../components/home/ServicesGrid';
-import { Capabilities } from '../components/home/Capabilities';
 import { ContactCTA } from '../components/home/ContactCTA';
 
 const structuredData = {
@@ -64,7 +63,6 @@ export default function Home() {
       <main className="relative z-10">
         <Hero />
         <ServicesGrid />
-        <Capabilities />
         <ContactCTA />
       </main>
     </>
