@@ -166,7 +166,15 @@ app.get('/api/health', (req, res) => {
 
 app.post('/api/login', (req, res) => {
   const { password } = req.body;
-  const adminPassword = process.env.ADMIN_PASSWORD || 'Srinivasakalyanam';
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  
+  if (!adminPassword) {
+    return res.status(500).json({
+      message: 'Admin authentication is not configured',
+      setup: 'Set ADMIN_PASSWORD in server/.env file',
+    });
+  }
+  
   if (password === adminPassword) {
     res.json({ success: true, token: 'sk-admin-token-' + Date.now() });
   } else {

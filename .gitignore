@@ -27,3 +27,6 @@ server/db.json
 *.njsproj
 *.sln
 *.sw?
+server/.env
+admin/.env
+.env.local
