@@ -361,7 +361,7 @@ export default function App() {
             <button onClick={() => setCurrentTab('service-orders')} className={`sidebar-link ${currentTab === 'service-orders' ? 'active' : ''}`}>
               <Inbox className="w-4 h-4" /> Service Orders
               {newServiceOrdersCount > 0 && (
-                <span style={{ marginLeft: 'auto', background: '#c5a880', color: '#000', fontSize: '10px', fontWeight: 900, padding: '2px 7px', borderRadius: '99px' }}>
+                <span style={{ marginLeft: 'auto', background: '#9CA6B7', color: '#070B12', fontSize: '10px', fontWeight: 900, padding: '2px 7px', borderRadius: '99px' }}>
                   {newServiceOrdersCount}
                 </span>
               )}
@@ -681,7 +681,7 @@ export default function App() {
 
             <div className="glass-card">
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(197,168,128,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(156,166,183,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Printer className="w-5 h-5 text-cosmic-gold" />
                 </div>
                 <div>
@@ -708,8 +708,8 @@ export default function App() {
                       {/* Existing colours */}
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
                         {(printColors[material] || []).map(color => (
-                          <div key={color} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '5px 12px', borderRadius: '99px', background: 'rgba(197,168,128,0.1)', border: '1px solid rgba(197,168,128,0.3)' }}>
-                            <span style={{ fontSize: '12px', color: '#c5a880', fontWeight: 700 }}>{color}</span>
+                          <div key={color} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '5px 12px', borderRadius: '99px', background: 'rgba(156,166,183,0.12)', border: '1px solid rgba(156,166,183,0.3)' }}>
+                            <span style={{ fontSize: '12px', color: '#9CA6B7', fontWeight: 700 }}>{color}</span>
                             <button onClick={() => handleRemoveColor(material, color)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.3)', lineHeight: 1, padding: 0 }}>
                               <X className="w-3 h-3 hover:text-red-400 transition-colors" />
                             </button>
@@ -882,7 +882,7 @@ export default function App() {
               {selectedOrder.option === 'customise' && (
                 <div>
                   <h4 className="form-label" style={{ marginBottom: '8px' }}>Customisation Details</h4>
-                  <div className="glass-card" style={{ padding: '16px', borderRadius: '12px', border: '1px solid rgba(197,168,128,0.2)', boxShadow: 'none' }}>
+                  <div className="glass-card" style={{ padding: '16px', borderRadius: '12px', border: '1px solid rgba(156,166,183,0.22)', boxShadow: 'none' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
                       <div>
                         <span className="text-[10px] font-black text-white/40 uppercase block mb-1">Email</span>
@@ -1000,15 +1000,15 @@ export default function App() {
                 <div>
                   <h4 className="form-label" style={{ marginBottom: '12px' }}>3D Print Specifications</h4>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-                    <div style={{ padding: '14px', borderRadius: '12px', background: 'rgba(197,168,128,0.05)', border: '1px solid rgba(197,168,128,0.2)' }}>
+                    <div style={{ padding: '14px', borderRadius: '12px', background: 'rgba(156,166,183,0.08)', border: '1px solid rgba(156,166,183,0.22)' }}>
                       <span className="text-[10px] font-black text-white/40 uppercase block mb-1">Material</span>
                       <span className="text-cosmic-gold font-black text-base">{selectedServiceOrder.material || '—'}</span>
                     </div>
-                    <div style={{ padding: '14px', borderRadius: '12px', background: 'rgba(197,168,128,0.05)', border: '1px solid rgba(197,168,128,0.2)' }}>
+                    <div style={{ padding: '14px', borderRadius: '12px', background: 'rgba(156,166,183,0.08)', border: '1px solid rgba(156,166,183,0.22)' }}>
                       <span className="text-[10px] font-black text-white/40 uppercase block mb-1">Colour</span>
                       <span className="text-white font-bold">{selectedServiceOrder.color || '—'}</span>
                     </div>
-                    <div style={{ padding: '14px', borderRadius: '12px', background: 'rgba(197,168,128,0.05)', border: '1px solid rgba(197,168,128,0.2)' }}>
+                    <div style={{ padding: '14px', borderRadius: '12px', background: 'rgba(156,166,183,0.08)', border: '1px solid rgba(156,166,183,0.22)' }}>
                       <span className="text-[10px] font-black text-white/40 uppercase block mb-1">Infill</span>
                       <span className="text-white font-black text-base">{selectedServiceOrder.infill !== undefined ? `${selectedServiceOrder.infill}%` : '—'}</span>
                     </div>

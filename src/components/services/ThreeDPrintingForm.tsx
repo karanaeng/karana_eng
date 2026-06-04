@@ -291,7 +291,7 @@ export const ThreeDPrintingForm = ({ prefill }: ThreeDPrintingFormProps) => {
         <input type="range" min={0} max={100} step={5} value={infill}
           onChange={e => setInfill(Number(e.target.value))}
           className="w-full h-2 rounded-full appearance-none cursor-pointer"
-          style={{ background: `linear-gradient(to right, hsl(43,100%,61%) ${infill}%, rgba(255,255,255,0.1) ${infill}%)` }}
+          style={{ background: `linear-gradient(to right, #9CA6B7 ${infill}%, rgba(245,247,250,0.1) ${infill}%)` }}
         />
         <div className="flex justify-between text-[9px] text-white/30 mt-1 font-montserrat">
           <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
@@ -323,7 +323,7 @@ export const ThreeDPrintingForm = ({ prefill }: ThreeDPrintingFormProps) => {
       </div>
 
       <button type="submit" disabled={status === 'sending'}
-        className="w-full py-4 bg-cosmic-gold text-cosmic-black font-black uppercase tracking-widest rounded-xl hover:bg-yellow-300 transition-all duration-300 flex items-center justify-center gap-3 group shadow-lg disabled:opacity-60">
+        className="w-full py-4 bg-cosmic-gold text-cosmic-black font-black uppercase tracking-widest rounded-xl hover:bg-cosmic-gold-light transition-all duration-300 flex items-center justify-center gap-3 group shadow-lg disabled:opacity-60">
         {status === 'sending' ? (
           <>
             <div className="w-5 h-5 border-2 border-cosmic-black/30 border-t-cosmic-black rounded-full animate-spin" />

@@ -20,13 +20,13 @@ const InnerHeroElement = () => {
       {/* Reduced sphere segments: 64,64 → 32,32 */}
       <Sphere ref={meshRef} args={[1, 32, 32]}>
         <MeshDistortMaterial
-          color="#FFD700"
+          color="#9CA6B7"
           speed={1.5}
           distort={0.3}
           radius={1}
           metalness={0.8}
           roughness={0.2}
-          emissive="#FFD700"
+          emissive="#9CA6B7"
           emissiveIntensity={0.15}
         />
       </Sphere>

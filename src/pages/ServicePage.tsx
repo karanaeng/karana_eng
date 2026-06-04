@@ -288,14 +288,14 @@ export default function ServicePage() {
           className="py-32 px-6 max-w-4xl mx-auto text-center"
           aria-label="Request this service"
         >
-          <div className="p-12 rounded-3xl bg-gradient-to-br from-cosmic-gold to-cosmic-gold-light text-cosmic-black">
+          <div className="p-12 rounded-3xl bg-cosmic-card border border-cosmic-border text-cosmic-white shadow-cosmic">
             <h2 className="text-3xl md:text-5xl font-black font-montserrat mb-8 tracking-tight">
               READY TO ELEVATE YOUR <br />
               ENGINEERING CAPABILITIES?
             </h2>
             <Link
               to={`/contact?service=${service.slug}`}
-              className="px-10 py-5 bg-cosmic-black text-white font-bold rounded-full inline-flex items-center gap-3 hover:scale-105 transition-all duration-300 shadow-2xl"
+              className="px-10 py-5 bg-cosmic-gold text-cosmic-black font-bold rounded-full inline-flex items-center gap-3 hover:bg-cosmic-gold-light hover:scale-105 transition-all duration-300 shadow-2xl"
             >
               Request This Service
               <ChevronRight aria-hidden="true" className="w-6 h-6" />
