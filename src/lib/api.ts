@@ -1,4 +1,6 @@
-const DEFAULT_API_BASE_URL = 'http://localhost:4000';
+const DEFAULT_API_BASE_URL = import.meta.env.PROD
+  ? 'https://karanaagency.onrender.com'
+  : 'http://localhost:4000';
 
 export class ApiError extends Error {
   status: number;
