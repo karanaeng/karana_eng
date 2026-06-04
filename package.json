@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run build:public && npm run build:admin && npm run copy:admin",
+    "postbuild": "echo 'Build complete'",
     "build:public": "tsc -b && vite build",
     "build:admin": "npm --prefix admin run build",
     "copy:admin": "node scripts/copy-admin-dist.js",
