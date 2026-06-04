@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { CosmicImage } from '../components/cosmic/CosmicImage';
 import { CosmicCard } from '../components/cosmic/CosmicCard';
 import { ShoppingBag, Sparkles, ServerCrash } from 'lucide-react';
+import { ApiError, apiFetch } from '../lib/api';
 
 interface Product {
   id: string;
@@ -35,13 +36,15 @@ export default function BuyProducts() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:4000/api/products');
-        if (!response.ok) throw new Error('Failed to fetch products');
-        const data = await response.json();
+        const data = await apiFetch<Product[]>('/api/products');
         setProducts(data);
       } catch (err) {
         console.error('Error fetching products:', err);
-        setError('Could not connect to the product database. Make sure the server is running.');
+        if (err instanceof ApiError) {
+          setError([err.message, err.setup, err.details].filter(Boolean).join(' '));
+        } else {
+          setError('Could not load products. Check the backend server and Supabase setup.');
+        }
       } finally {
         setIsLoading(false);
       }
@@ -207,8 +210,7 @@ export default function BuyProducts() {
               <ServerCrash className="w-12 h-12 text-red-500 mx-auto mb-4" aria-hidden="true" />
               <h2 className="text-xl font-bold text-white mb-2">Server Syncing</h2>
               <p className="text-white/60 text-xs font-montserrat">
-                Our secure catalog systems are performing a routing synchronization. Please reload
-                the page in a few moments.
+                {error}
               </p>
             </div>
           ) : filteredProducts.length === 0 ? (

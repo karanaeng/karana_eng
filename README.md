@@ -1,59 +1,114 @@
-# Karana - Elite Engineering Agency
+# Karana Agency
 
-A production-ready, award-winning website built with React, Three.js, and Tailwind CSS.
+A React/Vite public site, React/Vite admin dashboard, and Express backend powered by Supabase.
 
-## 🚀 Quick Start
+## Prerequisites
 
-1. **Install dependencies:**
-   \`\`\`bash
-   npm install
-   \`\`\`
+- Node.js 20 or newer
+- A Supabase project
+- Supabase project URL and service role key
 
-2. **Run development server:**
-   \`\`\`bash
-   npm run dev
-   \`\`\`
+## Supabase Setup
 
-3. **Build for production:**
-   \`\`\`bash
-   npm run build
-   \`\`\`
+1. Open your Supabase project dashboard.
+2. Go to **SQL Editor**.
+3. Run the full SQL script from `server/supabase-schema.sql`.
+4. Confirm these tables exist: `products`, `orders`, `service_orders`, and `settings`.
 
-## 🎨 Branding & Customization
+The schema creates the default `3dprint-colors` settings row. Store products are intentionally empty at first.
 
-### Logo Replacement
-To update the agency logo:
-- Replace the placeholder in the `Navbar` and `Footer` components.
-- Place your SVG logo in \`/public/logo.svg\`.
-- Update the \`<Logo />\` component (if created) or the SVG paths in the layout components.
+## Environment Setup
 
-### Theme Configuration
-The cosmic aesthetic is defined in \`tailwind.config.js\`. You can adjust the golden yellow and nebula purple colors there.
+Create `server/.env` from `server/.env.example`:
 
-## 🛠 Tech Stack
-- **Frontend:** React 18, TypeScript, Vite
-- **3D/Animation:** Three.js, React Three Fiber, Framer Motion, GSAP, Lenis
-- **Styling:** Tailwind CSS
-- **Form Handling:** React Hook Form, Zod
-- **Communications:** EmailJS
+```bash
+cd server
+copy .env.example .env
+```
 
-## 📧 Contact Form Setup
-The contact form uses EmailJS. To make it functional:
-1. Create an account at [emailjs.com](https://www.emailjs.com/).
-2. Create a new Email Service and Template.
-3. Replace the following placeholders in \`src/pages/Contact.tsx\`:
-   - \`YOUR_SERVICE_ID\`
-   - \`YOUR_TEMPLATE_ID\`
-   - \`YOUR_PUBLIC_KEY\`
+Fill in:
 
-## 📁 Project Structure
-- \`src/data/\`: Static content for projects and services.
-- \`src/components/cosmic/\`: 3D scenes, shaders, and particle systems.
-- \`src/components/layout/\`: Global components like Navbar and Footer.
-- \`src/pages/\`: Route-level components for the main site structure.
-- \`src/lib/\`: Utility functions and helpers.
+```env
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+ADMIN_PASSWORD=change-this-admin-password
+SERVER_PUBLIC_URL=http://localhost:4000
+PORT=4000
+```
 
-## 📈 Performance & SEO
-- Optimized using Three.js frustum culling and instanced rendering.
-- Responsive design across mobile, tablet, and desktop.
-- Semantic HTML and ARIA labels for accessibility.
+Do not commit `server/.env`. The backend uses the service role key only on the server.
+
+Optional frontend API overrides:
+
+```env
+VITE_API_BASE_URL=http://localhost:4000
+VITE_ADMIN_API_BASE_URL=http://localhost:4000
+```
+
+## Install Dependencies
+
+Install the public site dependencies:
+
+```bash
+npm install
+```
+
+Install the backend dependencies:
+
+```bash
+cd server
+npm install
+```
+
+Install the admin dashboard dependencies:
+
+```bash
+cd ../admin
+npm install
+```
+
+## Run Locally
+
+Start the backend:
+
+```bash
+cd server
+npm start
+```
+
+Start the public frontend from the repository root:
+
+```bash
+npm run dev
+```
+
+Start the admin dashboard in another terminal:
+
+```bash
+cd admin
+npm run dev
+```
+
+The public site defaults to `http://localhost:5173`, the admin dashboard to `http://localhost:5174`, and the backend to `http://localhost:4000`.
+
+## Products
+
+Initial products must be added through the admin dashboard before the public store shows catalog items. Log in to the admin dashboard, open **Manage Catalog**, and add the first product.
+
+## Production Build
+
+From the repository root:
+
+```bash
+npm run build
+```
+
+This builds the public site, builds the admin dashboard, and copies the compiled admin artifacts into `server/public/admin` using `scripts/copy-admin-dist.js`.
+
+## Project Structure
+
+- `src/`: public user-facing site
+- `admin/`: admin dashboard
+- `server/`: Express API, Supabase client, SQL schema, and uploaded static files
+- `scripts/copy-admin-dist.js`: copies `admin/dist` into `server/public/admin`
+- `supabase/config.toml`: local Supabase CLI project configuration

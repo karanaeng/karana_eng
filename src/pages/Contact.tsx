@@ -8,8 +8,7 @@ import { Send, CheckCircle, Mail, Phone, MapPin } from 'lucide-react';
 import { Helmet } from 'react-helmet-async'; // npm i react-helmet-async
 import { services } from '../data/services';
 import { ThreeDPrintingForm } from '../components/services/ThreeDPrintingForm';
-
-const API = 'http://localhost:4000';
+import { apiFetch } from '../lib/api';
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Name is required'),
@@ -78,7 +77,7 @@ export default function Contact() {
   const onSubmit = async (data: ContactFormValues) => {
     setStatus('sending');
     try {
-      await fetch(`${API}/api/service-orders`, {
+      await apiFetch('/api/service-orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

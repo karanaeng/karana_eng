@@ -4,11 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-  "dev": "vite",
-  "build": "tsc -b && vite build",
-  "preview": "vite preview",
-  "postbuild": "node scripts/check-sitemap.js"
-},
+    "dev": "vite",
+    "build": "npm run build:public && npm run build:admin && npm run copy:admin",
+    "build:public": "tsc -b && vite build",
+    "build:admin": "npm --prefix admin run build",
+    "copy:admin": "node scripts/copy-admin-dist.js",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@hookform/resolvers": "^5.2.2",

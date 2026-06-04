@@ -7,6 +7,7 @@ import {
   ArrowLeft, ShoppingBag, Sparkles, CreditCard,
   Upload, CheckCircle, ArrowRight, Loader
 } from 'lucide-react';
+import { apiFetch, apiUrl } from '../lib/api';
 
 interface BillingAddress {
   name: string;
@@ -90,7 +91,7 @@ export default function Checkout() {
       if (selectedFile) {
         const formData = new FormData();
         formData.append('file', selectedFile);
-        const uploadRes = await fetch('http://localhost:4000/api/upload', {
+        const uploadRes = await fetch(apiUrl('/api/upload'), {
           method: 'POST',
           body: formData,
         });
@@ -113,14 +114,12 @@ export default function Checkout() {
         paymentMethod,
       };
 
-      const response = await fetch('http://localhost:4000/api/orders', {
+      const orderData = await apiFetch<any>('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderPayload),
       });
 
-      if (!response.ok) throw new Error('Order creation failed');
-      const orderData = await response.json();
       setOrderConfirmed(orderData);
     } catch (err: any) {
       console.error(err);
@@ -444,7 +443,7 @@ export default function Checkout() {
                       <img
                         src={
                           product.thumbnail === '/placeholder.svg'
-                            ? 'http://localhost:4000/placeholder.svg'
+                            ? '/placeholder.svg'
                             : product.thumbnail
                         }
                         alt={`${product.title} thumbnail`}

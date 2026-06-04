@@ -1,12 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, CheckCircle, Upload, X } from 'lucide-react';
+import { apiFetch, apiUrl } from '../../lib/api';
 
 type FormState = 'idle' | 'sending' | 'success';
 
 const MATERIALS = ['PLA+', 'PETG', 'TPU'];
 const HEAR_OPTIONS = ['Google Search', 'Instagram', 'LinkedIn', 'Friend / Referral', 'Direct / Already knew', 'Other'];
-
-const API = 'http://localhost:4000';
 
 interface ThreeDPrintingFormProps {
   /** Pass the name/email/phone if already filled in parent contact form */
@@ -54,8 +53,7 @@ export const ThreeDPrintingForm = ({ prefill }: ThreeDPrintingFormProps) => {
     }
     setLoadingColors(true);
     setSelectedColor('');
-    fetch(`${API}/api/settings/3dprint-colors`)
-      .then(r => r.json())
+    apiFetch<Record<string, string[]>>('/api/settings/3dprint-colors')
       .then(data => {
         setColorOptions(data[material] || []);
       })
@@ -86,7 +84,7 @@ export const ThreeDPrintingForm = ({ prefill }: ThreeDPrintingFormProps) => {
         const formData = new FormData();
         formData.append('file', uploadedFile);
         try {
-          const uploadRes = await fetch(`${API}/api/upload`, { method: 'POST', body: formData });
+          const uploadRes = await fetch(apiUrl('/api/upload'), { method: 'POST', body: formData });
           if (uploadRes.ok) {
             const uploadData = await uploadRes.json();
             fileUrl = uploadData.url;
@@ -98,7 +96,7 @@ export const ThreeDPrintingForm = ({ prefill }: ThreeDPrintingFormProps) => {
       }
 
       // Submit service order
-      await fetch(`${API}/api/service-orders`, {
+      await apiFetch('/api/service-orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

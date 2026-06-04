@@ -24,8 +24,8 @@ import {
   Phone,
   ChevronDown
 } from 'lucide-react';
+import { ApiError, apiFetch, apiUrl, getApiBaseUrl } from './lib/api';
 
-const API = 'http://localhost:4000';
 const POLL_INTERVAL = 15000; // 15-second auto-refresh for service orders
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -123,22 +123,24 @@ export default function App() {
     else setIsRefreshing(true);
     setApiError(null);
     try {
-      const [prodRes, ordRes, svcRes, colRes] = await Promise.all([
-        fetch(`${API}/api/products`),
-        fetch(`${API}/api/orders`),
-        fetch(`${API}/api/service-orders`),
-        fetch(`${API}/api/settings/3dprint-colors`),
+      const [productsData, ordersData, serviceOrdersData, colorsData] = await Promise.all([
+        apiFetch<Product[]>('/api/products'),
+        apiFetch<Order[]>('/api/orders'),
+        apiFetch<ServiceOrder[]>('/api/service-orders'),
+        apiFetch<PrintColors>('/api/settings/3dprint-colors'),
       ]);
 
-      if (!prodRes.ok || !ordRes.ok || !svcRes.ok) throw new Error('Failed to retrieve server data');
-
-      setProducts(await prodRes.json());
-      setOrders(await ordRes.json());
-      setServiceOrders(await svcRes.json());
-      if (colRes.ok) setPrintColors(await colRes.json());
+      setProducts(productsData);
+      setOrders(ordersData);
+      setServiceOrders(serviceOrdersData);
+      setPrintColors(colorsData);
     } catch (err) {
       console.error(err);
-      setApiError('Unable to connect to the backend server at localhost:4000. Make sure it is running.');
+      if (err instanceof ApiError) {
+        setApiError([err.message, err.setup, err.details].filter(Boolean).join(' '));
+      } else {
+        setApiError(`Unable to connect to the backend server at ${getApiBaseUrl()}. Make sure it is running.`);
+      }
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);
@@ -160,13 +162,11 @@ export default function App() {
     setLoginError('');
     setIsLoggingIn(true);
     try {
-      const res = await fetch(`${API}/api/login`, {
+      const data = await apiFetch<{ token: string }>('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password })
       });
-      if (!res.ok) throw new Error('Auth rejected');
-      const data = await res.json();
       localStorage.setItem('karana_admin_token', data.token);
       setToken(data.token);
     } catch {
@@ -193,9 +193,8 @@ export default function App() {
       thumbnail: productForm.thumbnail || '/placeholder.svg', options: optionsArray
     };
     try {
-      const url = editingProduct ? `${API}/api/products/${editingProduct.id}` : `${API}/api/products`;
-      const res = await fetch(url, { method: editingProduct ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-      if (!res.ok) throw new Error();
+      const url = editingProduct ? `/api/products/${editingProduct.id}` : '/api/products';
+      await apiFetch(url, { method: editingProduct ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       setShowProductModal(false);
       setEditingProduct(null);
       setProductForm({ title: '', description: '', category: 'Websites', price: 0, thumbnail: '', purchase: true, customise: true });
@@ -216,7 +215,7 @@ export default function App() {
   const handleDeleteProduct = async (id: string) => {
     if (!confirm('Delete this product?')) return;
     try {
-      await fetch(`${API}/api/products/${id}`, { method: 'DELETE' });
+      await apiFetch(`/api/products/${id}`, { method: 'DELETE' });
       fetchData();
     } catch { alert('Could not delete product'); }
   };
@@ -227,7 +226,7 @@ export default function App() {
       const formData = new FormData();
       formData.append('file', e.target.files[0]);
       try {
-        const res = await fetch(`${API}/api/upload`, { method: 'POST', body: formData });
+        const res = await fetch(apiUrl('/api/upload'), { method: 'POST', body: formData });
         if (!res.ok) throw new Error();
         const data = await res.json();
         setProductForm(prev => ({ ...prev, thumbnail: data.url }));
@@ -239,7 +238,7 @@ export default function App() {
   // ── Order status update ──────────────────────────────────────────────────────
   const handleUpdateOrderStatus = async (id: string, newStatus: Order['status']) => {
     try {
-      await fetch(`${API}/api/orders/${id}/status`, {
+      await apiFetch(`/api/orders/${id}/status`, {
         method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: newStatus })
       });
       fetchData();
@@ -250,7 +249,7 @@ export default function App() {
   // ── Service order status update ──────────────────────────────────────────────
   const handleUpdateServiceOrderStatus = async (id: string, newStatus: ServiceOrder['status']) => {
     try {
-      await fetch(`${API}/api/service-orders/${id}/status`, {
+      await apiFetch(`/api/service-orders/${id}/status`, {
         method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: newStatus })
       });
       fetchData();
@@ -274,10 +273,10 @@ export default function App() {
 
   const savePrintColors = async (colors: PrintColors) => {
     try {
-      const res = await fetch(`${API}/api/settings/3dprint-colors`, {
+      await apiFetch('/api/settings/3dprint-colors', {
         method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(colors)
       });
-      if (res.ok) setPrintColors(colors);
+      setPrintColors(colors);
     } catch { alert('Failed to save colour settings'); }
   };
 
@@ -513,7 +512,7 @@ export default function App() {
                         <tr key={product.id}>
                           <td>
                             <div className="w-12 h-12 rounded-lg bg-cosmic-black overflow-hidden border border-white/10">
-                              <img src={product.thumbnail === '/placeholder.svg' ? `${API}/placeholder.svg` : product.thumbnail} alt={product.title} className="w-full h-full object-cover" />
+                              <img src={product.thumbnail === '/placeholder.svg' ? '/placeholder.svg' : product.thumbnail} alt={product.title} className="w-full h-full object-cover" />
                             </div>
                           </td>
                           <td className="font-bold text-white">{product.title}</td>
@@ -1091,3 +1090,4 @@ export default function App() {
     </div>
   );
 }
+
