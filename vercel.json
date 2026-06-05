@@ -2,15 +2,15 @@
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/admindashboard/(.*)",
-      "destination": "/admindashboard/index.html"
-    },
-    {
       "source": "/admindashboard",
       "destination": "/admindashboard/index.html"
     },
     {
-      "source": "/((?!admindashboard).*)$",
+      "source": "/admindashboard/:path*",
+      "destination": "/admindashboard/index.html"
+    },
+    {
+      "source": "/:path*",
       "destination": "/index.html"
     }
   ]
