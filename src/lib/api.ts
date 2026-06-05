@@ -22,6 +22,24 @@ export const getApiBaseUrl = () =>
 export const apiUrl = (path: string) =>
   `${getApiBaseUrl()}${path.startsWith('/') ? path : `/${path}`}`;
 
+export const assetUrl = (url?: string | null) => {
+  if (!url) return '';
+  if (url === '/placeholder.svg') return url;
+  if (url.startsWith('/uploads/')) return apiUrl(url);
+  if (url.startsWith('uploads/')) return apiUrl(`/${url}`);
+
+  try {
+    const parsed = new URL(url);
+    if (parsed.pathname.startsWith('/uploads/') && ['localhost', '127.0.0.1'].includes(parsed.hostname)) {
+      return apiUrl(parsed.pathname);
+    }
+  } catch {
+    // Non-URL strings fall through unchanged so normal public assets still work.
+  }
+
+  return url;
+};
+
 export const apiFetch = async <T>(path: string, options?: RequestInit): Promise<T> => {
   let response: Response;
 

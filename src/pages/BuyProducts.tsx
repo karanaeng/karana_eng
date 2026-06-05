@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { CosmicImage } from '../components/cosmic/CosmicImage';
 import { CosmicCard } from '../components/cosmic/CosmicCard';
 import { ShoppingBag, Sparkles, ServerCrash } from 'lucide-react';
-import { ApiError, apiFetch } from '../lib/api';
+import { ApiError, apiFetch, assetUrl } from '../lib/api';
 
 interface Product {
   id: string;
@@ -73,7 +73,7 @@ export default function BuyProducts() {
         '@type': 'Product',
         name: product.title,
         description: product.description,
-        image: product.thumbnail,
+        image: assetUrl(product.thumbnail),
         offers: {
           '@type': 'Offer',
           priceCurrency: 'INR',
@@ -260,7 +260,7 @@ export default function BuyProducts() {
                       {/* Thumbnail */}
                       <div className="relative aspect-[16/10] overflow-hidden w-full bg-cosmic-black border-b border-white/5">
                         <CosmicImage
-                          src={product.thumbnail}
+                          src={assetUrl(product.thumbnail)}
                           alt={`${product.title} preview thumbnail`}
                           title={product.title}
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"

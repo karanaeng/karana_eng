@@ -24,7 +24,7 @@ import {
   Phone,
   ChevronDown
 } from 'lucide-react';
-import { ApiError, apiFetch, apiUrl, getApiBaseUrl } from './lib/api';
+import { ApiError, apiFetch, apiUrl, assetUrl, getApiBaseUrl } from './lib/api';
 
 const POLL_INTERVAL = 15000; // 15-second auto-refresh for service orders
 
@@ -522,7 +522,7 @@ export default function App() {
                         <tr key={product.id}>
                           <td>
                             <div className="w-12 h-12 rounded-lg bg-cosmic-black overflow-hidden border border-white/10">
-                              <img src={product.thumbnail === '/placeholder.svg' ? '/placeholder.svg' : product.thumbnail} alt={product.title} className="w-full h-full object-cover" />
+                              <img src={assetUrl(product.thumbnail)} alt={product.title} className="w-full h-full object-cover" />
                             </div>
                           </td>
                           <td className="font-bold text-white">{product.title}</td>
@@ -809,7 +809,7 @@ export default function App() {
                   </div>
                   {productForm.thumbnail && (
                     <div className="w-12 h-12 rounded-lg border border-white/10 overflow-hidden flex-shrink-0 bg-cosmic-black">
-                      <img src={productForm.thumbnail} className="w-full h-full object-cover" alt="" />
+                      <img src={assetUrl(productForm.thumbnail)} className="w-full h-full object-cover" alt="" />
                     </div>
                   )}
                 </div>

@@ -7,7 +7,7 @@ import {
   ArrowLeft, ShoppingBag, Sparkles, CreditCard,
   Upload, CheckCircle, ArrowRight, Loader
 } from 'lucide-react';
-import { apiFetch, apiUrl } from '../lib/api';
+import { apiFetch, apiUrl, assetUrl } from '../lib/api';
 
 interface BillingAddress {
   name: string;
@@ -441,11 +441,7 @@ export default function Checkout() {
                   <div className="flex gap-4 border-b border-white/5 pb-4 mb-4">
                     <div className="w-16 h-16 rounded-lg bg-cosmic-black overflow-hidden flex-shrink-0">
                       <img
-                        src={
-                          product.thumbnail === '/placeholder.svg'
-                            ? '/placeholder.svg'
-                            : product.thumbnail
-                        }
+                        src={assetUrl(product.thumbnail)}
                         alt={`${product.title} thumbnail`}
                         className="w-full h-full object-cover"
                         loading="lazy"
