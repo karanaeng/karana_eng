@@ -11,6 +11,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+const STORAGE_BUCKET = process.env.SUPABASE_STORAGE_BUCKET || 'karana-uploads';
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -39,14 +40,34 @@ app.get('/admin/*', (req, res) => {
   res.sendFile(path.join(publicDir, 'admin', 'index.html'));
 });
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadsDir),
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  },
-});
-const upload = multer({ storage });
+const upload = multer({ storage: multer.memoryStorage() });
+
+const createUploadFilename = (originalName = '') => {
+  const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+  return `${uniqueSuffix}${path.extname(originalName)}`;
+};
+
+let storageBucketReady = false;
+const ensureStorageBucket = async () => {
+  if (storageBucketReady) return;
+
+  const { error } = await supabase.storage.getBucket(STORAGE_BUCKET);
+  if (!error) {
+    storageBucketReady = true;
+    return;
+  }
+
+  const { error: createError } = await supabase.storage.createBucket(STORAGE_BUCKET, {
+    public: true,
+    fileSizeLimit: 25 * 1024 * 1024,
+  });
+
+  if (createError && createError.message !== 'Bucket already exists') {
+    throw createError;
+  }
+
+  storageBucketReady = true;
+};
 
 const requireDatabase = (res) => {
   if (isSupabaseConfigured && supabase) return true;
@@ -251,12 +272,35 @@ app.delete('/api/products/:id', async (req, res) => {
   res.json({ success: true });
 });
 
-app.post('/api/upload', upload.single('file'), (req, res) => {
+app.post('/api/upload', upload.single('file'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
   }
-  const fileUrl = `/uploads/${req.file.filename}`;
-  res.json({ url: fileUrl, filename: req.file.originalname });
+
+  const filename = createUploadFilename(req.file.originalname);
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      await ensureStorageBucket();
+      const { error } = await supabase.storage
+        .from(STORAGE_BUCKET)
+        .upload(filename, req.file.buffer, {
+          contentType: req.file.mimetype || 'application/octet-stream',
+          upsert: false,
+        });
+
+      if (error) throw error;
+
+      const { data } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(filename);
+      return res.json({ url: data.publicUrl, filename: req.file.originalname });
+    } catch (error) {
+      return sendDatabaseError(res, error, 'Failed to upload file to storage');
+    }
+  }
+
+  const filePath = path.join(uploadsDir, filename);
+  fs.writeFileSync(filePath, req.file.buffer);
+  res.json({ url: `/uploads/${filename}`, filename: req.file.originalname });
 });
 
 app.get('/api/orders', async (req, res) => {
