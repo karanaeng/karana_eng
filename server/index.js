@@ -66,6 +66,9 @@ const sendDatabaseError = (res, error, fallback = 'Database request failed') => 
   });
 };
 
+const createRecordId = (prefix) =>
+  `${prefix}_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+
 const productFromDb = (row) => ({
   id: row.id,
   title: row.title,
@@ -210,7 +213,10 @@ app.post('/api/products', async (req, res) => {
   if (!requireDatabase(res)) return;
   const { data, error } = await supabase
     .from('products')
-    .insert(productToDb(req.body))
+    .insert({
+      id: createRecordId('prod'),
+      ...productToDb(req.body),
+    })
     .select()
     .single();
 

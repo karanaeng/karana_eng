@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run build:public && npm run build:admin && npm run copy:admin",
+    "build": "npm run build:public && npm run build:admin && npm run copy:admin && npm run copy:routes",
     "postbuild": "echo 'Build complete'",
     "build:public": "tsc -b && vite build",
     "build:admin": "npm --prefix admin run build",
     "copy:admin": "node scripts/copy-admin-dist.js",
+    "copy:routes": "node scripts/copy-spa-routes.js",
     "preview": "vite preview"
   },
   "dependencies": {

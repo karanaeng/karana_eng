@@ -199,7 +199,12 @@ export default function App() {
       setEditingProduct(null);
       setProductForm({ title: '', description: '', category: 'Websites', price: 0, thumbnail: '', purchase: true, customise: true });
       fetchData();
-    } catch { alert('Product creation/modification failed'); }
+    } catch (error) {
+      const message = error instanceof ApiError
+        ? [error.message, error.details, error.setup].filter(Boolean).join('\n')
+        : 'Product creation/modification failed';
+      alert(message);
+    }
   };
 
   const handleEditProduct = (product: Product) => {
@@ -227,10 +232,15 @@ export default function App() {
       formData.append('file', e.target.files[0]);
       try {
         const res = await fetch(apiUrl('/api/upload'), { method: 'POST', body: formData });
-        if (!res.ok) throw new Error();
+        if (!res.ok) {
+          const payload = await res.json().catch(() => null);
+          throw new Error(payload?.message || 'File upload failed');
+        }
         const data = await res.json();
         setProductForm(prev => ({ ...prev, thumbnail: data.url }));
-      } catch { alert('File upload failed'); }
+      } catch (error) {
+        alert(error instanceof Error ? error.message : 'File upload failed');
+      }
       finally { setUploadingFile(false); }
     }
   };
