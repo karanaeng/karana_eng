@@ -29,7 +29,7 @@ export const ContactCTA = () => {
             to="/contact"
             className="group px-10 py-5 bg-cosmic-gold text-cosmic-black font-bold rounded-full inline-flex items-center gap-3 hover:bg-cosmic-gold-light hover:scale-105 transition-all duration-300 shadow-2xl"
           >
-            Let's Talk Strategy
+            Talk To Us
             <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>

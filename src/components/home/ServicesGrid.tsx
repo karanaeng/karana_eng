@@ -33,25 +33,26 @@ export const ServicesGrid = () => {
         {services.map((service) => {
           const Icon = (LucideIcons[service.icon as keyof typeof LucideIcons] || LucideIcons.Box) as React.ComponentType<{ size: number }>;
           return (
-            <CosmicCard key={service.id} className="h-full flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 bg-cosmic-gold/10 rounded-lg flex items-center justify-center mb-6 text-cosmic-gold transition-colors group-hover:bg-cosmic-gold group-hover:text-cosmic-black">
-                  <Icon size={24} />
+            <Link key={service.id} to={`/services/${service.slug}`} className="block h-full cursor-pointer">
+              <CosmicCard className="h-full flex flex-col justify-between group">
+                <div>
+                  <div className="w-12 h-12 bg-cosmic-gold/10 rounded-lg flex items-center justify-center mb-6 text-cosmic-gold transition-colors group-hover:bg-cosmic-gold group-hover:text-cosmic-black">
+                    <Icon size={24} />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-3 font-montserrat group-hover:text-cosmic-gold transition-colors">
+                    {service.name}
+                  </h3>
+                  <p className="text-white/60 text-sm leading-relaxed mb-6 font-montserrat">
+                    {service.description}
+                  </p>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3 font-montserrat">
-                  {service.name}
-                </h3>
-                <p className="text-white/60 text-sm leading-relaxed mb-6 font-montserrat">
-                  {service.description}
-                </p>
-              </div>
-              <Link
-                to={`/services/${service.slug}`}
-                className="text-cosmic-gold text-xs font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-3 transition-all"
-              >
-                Explore Service <span className="text-lg">→</span>
-              </Link>
-            </CosmicCard>
+                <div
+                  className="text-cosmic-gold text-xs font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-3 transition-all"
+                >
+                  Explore Service <span className="text-lg">→</span>
+                </div>
+              </CosmicCard>
+            </Link>
           );
         })}
       </div>

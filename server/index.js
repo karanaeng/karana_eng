@@ -30,11 +30,6 @@ app.use(cors({
 app.use(express.json({ limit: '2mb' }));
 
 const publicDir = path.join(__dirname, 'public');
-const uploadsDir = path.join(publicDir, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
-app.use('/uploads', express.static(uploadsDir));
 app.use(express.static(publicDir));
 app.get('/admin/*', (req, res) => {
   res.sendFile(path.join(publicDir, 'admin', 'index.html'));
@@ -171,7 +166,7 @@ const serviceOrderToDb = (body) => ({
   material: body.material || null,
   color: body.color || null,
   infill: body.infill ?? null,
-  extra_info: body.extraInfo || null,
+  extra_info: body.extra_info || null,
   hear_about: body.hearAbout || null,
   model_file: body.modelFile || null,
   model_filename: body.modelFilename || null,
@@ -273,34 +268,29 @@ app.delete('/api/products/:id', async (req, res) => {
 });
 
 app.post('/api/upload', upload.single('file'), async (req, res) => {
+  if (!requireDatabase(res)) return;
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
   }
 
   const filename = createUploadFilename(req.file.originalname);
 
-  if (isSupabaseConfigured && supabase) {
-    try {
-      await ensureStorageBucket();
-      const { error } = await supabase.storage
-        .from(STORAGE_BUCKET)
-        .upload(filename, req.file.buffer, {
-          contentType: req.file.mimetype || 'application/octet-stream',
-          upsert: false,
-        });
+  try {
+    await ensureStorageBucket();
+    const { error } = await supabase.storage
+      .from(STORAGE_BUCKET)
+      .upload(filename, req.file.buffer, {
+        contentType: req.file.mimetype || 'application/octet-stream',
+        upsert: false,
+      });
 
-      if (error) throw error;
+    if (error) throw error;
 
-      const { data } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(filename);
-      return res.json({ url: data.publicUrl, filename: req.file.originalname });
-    } catch (error) {
-      return sendDatabaseError(res, error, 'Failed to upload file to storage');
-    }
+    const { data } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(filename);
+    res.json({ url: data.publicUrl, filename: req.file.originalname });
+  } catch (error) {
+    sendDatabaseError(res, error, 'Failed to upload file to storage');
   }
-
-  const filePath = path.join(uploadsDir, filename);
-  fs.writeFileSync(filePath, req.file.buffer);
-  res.json({ url: `/uploads/${filename}`, filename: req.file.originalname });
 });
 
 app.get('/api/orders', async (req, res) => {
