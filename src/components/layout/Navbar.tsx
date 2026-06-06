@@ -5,10 +5,10 @@ import { cn } from '../../lib/utils';
 
 const navLinks = [
   { name: 'Home', path: '/' },
-  { name: 'Buy Products', path: '/buy' },
   { name: 'Services', path: '/services' },
+  { name: 'Buy Products', path: '/buy' },
+  { name: 'Previous Works', path: '/works' },
   { name: 'About', path: '/about' },
-  { name: 'Contact', path: '/contact' },
 ];
 
 export const Navbar = () => {
@@ -53,7 +53,7 @@ export const Navbar = () => {
             to="/contact"
             className="px-5 py-2 bg-cosmic-gold text-cosmic-black font-bold rounded-full text-sm hover:bg-cosmic-gold-light transition-all duration-300 hover:shadow-gold-glow"
           >
-            Start Project
+            Contact Us
           </Link>
         </div>
 
@@ -90,7 +90,7 @@ export const Navbar = () => {
             onClick={() => setIsOpen(false)}
             className="w-full py-4 bg-cosmic-gold text-cosmic-black text-center font-bold rounded-xl"
           >
-            Start Project
+            Contact Us
           </Link>
         </div>
       </div>
