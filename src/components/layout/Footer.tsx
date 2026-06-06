@@ -22,13 +22,21 @@ export const Footer = () => {
           <div className="md:col-start-4 md:col-span-1">
             <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">Quick Links</h4>
             <ul className="space-y-4">
-              {['Home', 'Works', 'Services', 'About', 'Contact'].map((item) => (
-                <li key={item}>
-                  <Link to={`/${item.toLowerCase() === 'home' ? '' : item.toLowerCase()}`} className="text-white/50 hover:text-cosmic-gold transition-colors duration-300 text-sm font-montserrat">
-                    {item}
-                  </Link>
-                </li>
-              ))}
+              {['Home', 'Services', 'Buy Products', 'Previous Works', 'About', 'Contact'].map((item) => {
+                let path = '/';
+                if (item === 'Home') path = '/';
+                else if (item === 'Buy Products') path = '/buy';
+                else if (item === 'Previous Works') path = '/works';
+                else path = `/${item.toLowerCase()}`;
+
+                return (
+                  <li key={item}>
+                    <Link to={path} className="text-white/50 hover:text-cosmic-gold transition-colors duration-300 text-sm font-montserrat">
+                      {item}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
@@ -36,8 +44,11 @@ export const Footer = () => {
             <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">Connect</h4>
             <ul className="space-y-4">
               <li>
-                <a href="mailto:contactkaranaagency@gmail.com" className="flex items-center gap-3 text-white/50 hover:text-cosmic-gold transition-colors duration-300 text-sm font-montserrat">
-                  <Mail size={16} /> contactkaranaagency@gmail.com
+                <a href="mailto:contactkaranaagency@gmail.com" className="group flex items-center gap-3 text-white/50 hover:text-cosmic-gold transition-colors duration-300 text-sm font-montserrat">
+                  <span className="flex items-center justify-center w-5 h-5">
+                    <Mail size={18} className="text-white/50 group-hover:text-cosmic-gold transition-colors" />
+                  </span>
+                  contactkaranaagency@gmail.com
                 </a>
               </li>
               <li>

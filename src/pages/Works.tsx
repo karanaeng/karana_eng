@@ -98,12 +98,33 @@ export default function Works() {
 
           {/* Search + filter controls */}
           <div
-            className="flex flex-col md:flex-row items-center justify-center gap-6 mb-16"
+            className="flex flex-col items-center justify-center gap-8 mb-16"
             role="search"
             aria-label="Filter projects"
           >
+            {/* Category filter buttons */}
+            <nav aria-label="Filter projects by service category">
+              <ul className="flex flex-wrap justify-center gap-2 list-none p-0 m-0">
+                {categories.map((cat) => (
+                  <li key={cat}>
+                    <button
+                      onClick={() => setFilter(cat)}
+                      aria-pressed={filter === cat}
+                      aria-label={`Filter by ${cat}`}
+                      className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 ${filter === cat
+                          ? 'bg-cosmic-gold text-cosmic-black shadow-gold-glow'
+                          : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10 border border-white/5'
+                        }`}
+                    >
+                      {cat}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
             {/* Search input */}
-            <div className="relative w-full md:w-96">
+            <div className="relative w-full max-w-md">
               <label htmlFor="project-search" className="sr-only">
                 Search projects
               </label>
@@ -114,31 +135,9 @@ export default function Works() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 autoComplete="off"
-                className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-full text-white font-montserrat focus:outline-none focus:border-cosmic-gold transition-all placeholder:text-white/30"
+                className="w-full px-8 py-3 bg-white/5 border border-white/10 rounded-full text-white font-montserrat focus:outline-none focus:border-cosmic-gold transition-all placeholder:text-white/30 text-center"
               />
             </div>
-
-            {/* Category filter buttons */}
-            <nav aria-label="Filter projects by service category">
-              <ul className="flex flex-wrap justify-center gap-2 list-none p-0 m-0">
-                {categories.map((cat) => (
-                  <li key={cat}>
-                    <button
-                      onClick={() => setFilter(cat)}
-                      aria-pressed={filter === cat}
-                      aria-label={`Filter by ${cat}`}
-                      className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 ${
-                        filter === cat
-                          ? 'bg-cosmic-gold text-cosmic-black'
-                          : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10 border border-white/5'
-                      }`}
-                    >
-                      {cat}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </nav>
           </div>
         </header>
 

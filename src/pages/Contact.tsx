@@ -7,7 +7,6 @@ import { useSearchParams } from 'react-router-dom';
 import { Send, CheckCircle, Mail, Phone, MapPin } from 'lucide-react';
 import { Helmet } from 'react-helmet-async'; // npm i react-helmet-async
 import { services } from '../data/services';
-import { ThreeDPrintingForm } from '../components/services/ThreeDPrintingForm';
 import { apiFetch } from '../lib/api';
 
 const contactSchema = z.object({
@@ -20,6 +19,7 @@ const contactSchema = z.object({
   timeline: z.string().optional(),
   details: z.string().min(10, 'Please provide more details about your project'),
   source: z.string().optional(),
+  driveLink: z.string().url('Invalid URL').or(z.literal('')).optional(),
 });
 
 type ContactFormValues = z.infer<typeof contactSchema>;
@@ -68,7 +68,6 @@ export default function Contact() {
   const watchedEmail = watch('email');
   const watchedPhone = watch('phone');
 
-  const is3DPrinting = selectedService === '3d-printing';
 
   useEffect(() => {
     if (initialService) setValue('service', initialService);
@@ -90,6 +89,7 @@ export default function Contact() {
           timeline: data.timeline ? `${data.timeline} days` : undefined,
           details: data.details,
           source: data.source,
+          driveLink: data.driveLink,
         })
       });
     } catch {
@@ -156,7 +156,7 @@ export default function Contact() {
               className="bg-white/5 backdrop-blur-xl p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl"
             >
               <AnimatePresence mode="wait">
-                {status === 'success' && !is3DPrinting ? (
+                {status === 'success' ? (
                   <motion.div
                     key="success"
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -190,7 +190,7 @@ export default function Contact() {
                 ) : (
                   <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                     <form
-                      onSubmit={is3DPrinting ? undefined : handleSubmit(onSubmit)}
+                      onSubmit={handleSubmit(onSubmit)}
                       className="space-y-6"
                       aria-label="Project enquiry form"
                       noValidate
@@ -223,147 +223,146 @@ export default function Contact() {
                         )}
                       </div>
 
-                      {/* 3D Printing branch */}
-                      <AnimatePresence mode="wait">
-                        {is3DPrinting ? (
-                          <motion.div key="3d-form" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                            <div className="mb-5 p-3 rounded-xl bg-cosmic-gold/10 border border-cosmic-gold/20">
-                              <p className="text-cosmic-gold text-xs font-bold uppercase tracking-widest">
-                                3D Printing — Specialist Order Form
-                              </p>
-                            </div>
-                            <ThreeDPrintingForm
-                              prefill={{
-                                name: watchedName,
-                                email: watchedEmail,
-                                phone: watchedPhone,
-                              }}
-                            />
-                          </motion.div>
-                        ) : (
-                          <motion.div
-                            key="standard-form"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="space-y-6"
-                          >
-                            {/* Name + Email + Company + Phone */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              {[
-                                { id: 'name', label: 'Full Name *', type: 'text', required: true, key: 'name' },
-                                { id: 'email', label: 'Email *', type: 'email', required: true, key: 'email' },
-                                { id: 'company', label: 'Company', type: 'text', required: false, key: 'company' },
-                                { id: 'phone', label: 'Phone', type: 'tel', required: false, key: 'phone' },
-                              ].map(({ id, label, type, required, key }) => (
-                                <div key={id} className="space-y-2">
-                                  <label
-                                    htmlFor={id}
-                                    className="text-xs font-bold uppercase tracking-widest text-white/50 ml-1"
-                                  >
-                                    {label}
-                                  </label>
-                                  <input
-                                    id={id}
-                                    type={type}
-                                    {...register(key as keyof ContactFormValues)}
-                                    aria-required={required}
-                                    aria-describedby={errors[key as keyof typeof errors] ? `${id}-error` : undefined}
-                                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-montserrat focus:outline-none focus:border-cosmic-gold transition-all"
-                                  />
-                                  {errors[key as keyof typeof errors] && (
-                                    <span id={`${id}-error`} role="alert" className="text-red-400 text-[10px] font-bold">
-                                      {errors[key as keyof typeof errors]?.message as string}
-                                    </span>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-
-                            {/* Custom service */}
-                            {selectedService === 'custom' && (
-                              <div className="space-y-2">
-                                <label htmlFor="customService" className="text-xs font-bold uppercase tracking-widest text-white/50 ml-1">
-                                  Describe your custom needs
-                                </label>
-                                <textarea
-                                  id="customService"
-                                  {...register('customService')}
-                                  rows={3}
-                                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-montserrat focus:outline-none focus:border-cosmic-gold transition-all"
-                                />
-                              </div>
-                            )}
-
-                            {/* Timeline */}
-                            <div className="space-y-2">
-                              <label htmlFor="timeline" className="text-xs font-bold uppercase tracking-widest text-white/50 ml-1">
-                                Timeline <span className="text-white/30 normal-case font-normal">(optional — number of days)</span>
+                      <motion.div
+                        key="standard-form"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="space-y-6"
+                      >
+                        {/* Name + Email + Company + Phone */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {[
+                            { id: 'name', label: 'Full Name *', type: 'text', required: true, key: 'name' },
+                            { id: 'email', label: 'Email *', type: 'email', required: true, key: 'email' },
+                            { id: 'company', label: 'Company', type: 'text', required: false, key: 'company' },
+                            { id: 'phone', label: 'Phone', type: 'tel', required: false, key: 'phone' },
+                          ].map(({ id, label, type, required, key }) => (
+                            <div key={id} className="space-y-2">
+                              <label
+                                htmlFor={id}
+                                className="text-xs font-bold uppercase tracking-widest text-white/50 ml-1"
+                              >
+                                {label}
                               </label>
                               <input
-                                id="timeline"
-                                {...register('timeline')}
-                                type="number"
-                                min={1}
-                                placeholder="e.g. 30"
+                                id={id}
+                                type={type}
+                                {...register(key as keyof ContactFormValues)}
+                                aria-required={required}
+                                aria-describedby={errors[key as keyof typeof errors] ? `${id}-error` : undefined}
                                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-montserrat focus:outline-none focus:border-cosmic-gold transition-all"
                               />
-                            </div>
-
-                            {/* Project Details */}
-                            <div className="space-y-2">
-                              <label htmlFor="details" className="text-xs font-bold uppercase tracking-widest text-white/50 ml-1">
-                                Project Details *
-                              </label>
-                              <textarea
-                                id="details"
-                                {...register('details')}
-                                rows={5}
-                                aria-required="true"
-                                aria-describedby={errors.details ? 'details-error' : undefined}
-                                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-montserrat focus:outline-none focus:border-cosmic-gold transition-all"
-                              />
-                              {errors.details && (
-                                <span id="details-error" role="alert" className="text-red-400 text-[10px] font-bold">
-                                  {errors.details.message}
+                              {errors[key as keyof typeof errors] && (
+                                <span id={`${id}-error`} role="alert" className="text-red-400 text-[10px] font-bold">
+                                  {errors[key as keyof typeof errors]?.message as string}
                                 </span>
                               )}
                             </div>
+                          ))}
+                        </div>
 
-                            {/* Source */}
-                            <div className="space-y-2">
-                              <label htmlFor="source" className="text-xs font-bold uppercase tracking-widest text-white/50 ml-1">
-                                How did you hear about us?
-                              </label>
-                              <input
-                                id="source"
-                                {...register('source')}
-                                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-montserrat focus:outline-none focus:border-cosmic-gold transition-all"
-                              />
-                            </div>
-
-                            {/* Submit */}
-                            <button
-                              type="submit"
-                              disabled={status === 'sending'}
-                              aria-disabled={status === 'sending'}
-                              className="w-full py-5 bg-cosmic-gold text-cosmic-black font-black uppercase tracking-widest rounded-xl hover:bg-cosmic-gold-light transition-all duration-300 flex items-center justify-center gap-3 group shadow-gold-glow disabled:opacity-60"
-                            >
-                              {status === 'sending' ? (
-                                <>
-                                  <div className="w-5 h-5 border-2 border-cosmic-black/30 border-t-cosmic-black rounded-full animate-spin" aria-hidden="true" />
-                                  Transmitting...
-                                </>
-                              ) : (
-                                <>
-                                  Send Transmission
-                                  <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
-                                </>
-                              )}
-                            </button>
-                          </motion.div>
+                        {/* Custom service */}
+                        {selectedService === 'custom' && (
+                          <div className="space-y-2">
+                            <label htmlFor="customService" className="text-xs font-bold uppercase tracking-widest text-white/50 ml-1">
+                              Describe your custom needs
+                            </label>
+                            <textarea
+                              id="customService"
+                              {...register('customService')}
+                              rows={3}
+                              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-montserrat focus:outline-none focus:border-cosmic-gold transition-all"
+                            />
+                          </div>
                         )}
-                      </AnimatePresence>
+
+                        {/* Timeline */}
+                        <div className="space-y-2">
+                          <label htmlFor="timeline" className="text-xs font-bold uppercase tracking-widest text-white/50 ml-1">
+                            Timeline <span className="text-white/30 normal-case font-normal">(optional — number of days)</span>
+                          </label>
+                          <input
+                            id="timeline"
+                            {...register('timeline')}
+                            type="number"
+                            min={1}
+                            placeholder="e.g. 30"
+                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-montserrat focus:outline-none focus:border-cosmic-gold transition-all"
+                          />
+                        </div>
+
+                        {/* Project Details */}
+                        <div className="space-y-2">
+                          <label htmlFor="details" className="text-xs font-bold uppercase tracking-widest text-white/50 ml-1">
+                            Project Details *
+                          </label>
+                          <textarea
+                            id="details"
+                            {...register('details')}
+                            rows={5}
+                            aria-required="true"
+                            aria-describedby={errors.details ? 'details-error' : undefined}
+                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-montserrat focus:outline-none focus:border-cosmic-gold transition-all"
+                          />
+                          {errors.details && (
+                            <span id="details-error" role="alert" className="text-red-400 text-[10px] font-bold">
+                              {errors.details.message}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Source */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <label htmlFor="driveLink" className="text-xs font-bold uppercase tracking-widest text-white/50 ml-1">
+                              Google Drive Link
+                            </label>
+                            <input
+                              id="driveLink"
+                              {...register('driveLink')}
+                              placeholder="https://drive.google.com/..."
+                              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-montserrat focus:outline-none focus:border-cosmic-gold transition-all"
+                            />
+                            {errors.driveLink && (
+                              <span role="alert" className="text-red-400 text-[10px] font-bold">
+                                {errors.driveLink.message}
+                              </span>
+                            )}
+                          </div>
+                          <div className="space-y-2">
+                            <label htmlFor="source" className="text-xs font-bold uppercase tracking-widest text-white/50 ml-1">
+                              How did you hear about us?
+                            </label>
+                            <input
+                              id="source"
+                              {...register('source')}
+                              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-montserrat focus:outline-none focus:border-cosmic-gold transition-all"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Submit */}
+                        <button
+                          type="submit"
+                          disabled={status === 'sending'}
+                          aria-disabled={status === 'sending'}
+                          className="w-full py-5 bg-cosmic-gold text-cosmic-black font-black uppercase tracking-widest rounded-xl hover:bg-cosmic-gold-light transition-all duration-300 flex items-center justify-center gap-3 group shadow-gold-glow disabled:opacity-60"
+                        >
+                          {status === 'sending' ? (
+                            <>
+                              <div className="w-5 h-5 border-2 border-cosmic-black/30 border-t-cosmic-black rounded-full animate-spin" aria-hidden="true" />
+                              Transmitting...
+                            </>
+                          ) : (
+                            <>
+                              Send Request
+                              <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                            </>
+                          )}
+                        </button>
+                      </motion.div>
+
                     </form>
                   </motion.div>
                 )}
